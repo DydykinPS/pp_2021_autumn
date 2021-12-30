@@ -88,9 +88,6 @@ TEST(Radix_Sort, Test4_Not_Parallel_VS_Parallel_With_Medium_Vector) {
 
     if (ProcRank == 0) {
         ASSERT_EQ(p_vec, not_p_vec);
-        std::cout << "NotParallel " << t2 - t1 << std::endl;
-        std::cout << "Parallel " << t4 - t3 << std::endl;
-        std::cout << "Effiency " << (t2 - t1) / (t4 - t3) << std::endl;
     }
     MPI_Barrier(MPI_COMM_WORLD);
 }

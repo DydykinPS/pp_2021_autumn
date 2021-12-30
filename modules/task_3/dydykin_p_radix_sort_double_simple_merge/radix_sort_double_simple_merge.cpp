@@ -12,57 +12,70 @@ std::vector<double> Get_Random_Vector(int size) {
     return vector;
 }
 
-int LeftOfThePoint(double num) {
-    int num_of_radix = 0;
-    while (num > 1) {
-        num /= 10;
-        num_of_radix++;
-    }
-    return num_of_radix;
-}
+std::vector<double> Merge(const std::vector<double>& vec_l,
+    const std::vector<double>& vec_r) {
+    std::vector<double> result((vec_l.size() + vec_r.size()));
 
-int RightOfThePoint(double num) {
-    std::ostringstream strs;
-    strs << num;
-    std::string str = strs.str();
-    if (str.find('.')) {
-        return -(static_cast<int>(str.find('.')) -
-            static_cast<int>(str.size())) - 1;
-    } else {
-        return 0;
-    }
-}
-
-std::vector<double> Merge(const std::vector<double>& vec_left,
-    const std::vector<double>& vec_right) {
-    std::vector<double> result((vec_left.size() + vec_right.size()));
+    int vec_l_size = vec_l.size();
+    int vec_r_size = vec_r.size();
 
     int i = 0, j = 0, k = 0;
-    while (i < static_cast<int>(vec_left.size())
-        && j < static_cast<int>(vec_right.size())) {
-        if (vec_left[i] < vec_right[j])
-            result[k] = vec_left[i++];
-        else
-            result[k] = vec_right[j++];
+    while (i < vec_l_size
+        && j < vec_r_size) {
+        if (vec_l[i] < vec_r[j]) {
+            result[k] = vec_l[i];
+            i++;
+        }
+        else {
+            result[k] = vec_r[j];
+            j++;
+        }
         k++;
     }
-    while (i < static_cast<int>(vec_left.size())) {
-        result[k++] = vec_left[i++];
+    while (i < vec_l_size) {
+        result[k] = vec_l[i];
+        k++;
+        i++;
     }
-    while (j < static_cast<int>(vec_right.size())) {
-        result[k++] = vec_right[j++];
+    while (j < vec_r_size) {
+        result[k] = vec_r[j];
+        k++;
+        j++;
     }
     return result;
 }
 
 
-int GetDigit(double num, int radix) {
+int LeftOfThePoint(double number) {
+    int radix = 0;
+    while (number > 1) {
+        number = number / 10;
+        radix++;
+    }
+    return radix;
+}
+
+int RightOfThePoint(double number) {
+    std::ostringstream strs;
+    strs << number;
+    std::string str = strs.str();
+    int size = str.size();
+    if (str.find('.')) {
+        int pos = str.find('.');
+        int value = size - pos - 1;
+        return value;
+    } else {
+        return 0;
+    }
+}
+
+int GetDigit(double number, int radix) {
     if (radix > 0) {
         double mask = pow(10, radix);
-        double tmp = num / mask;
+        double tmp = number / mask;
         return static_cast<int>(tmp) % 10;
     }
-    return  static_cast<int>(num * pow(10, -radix)) % 10;
+    return  static_cast<int>(number * pow(10, -radix)) % 10;
 }
 
 std::vector<double> RadixSort(const std::vector<double>& vect, int rad) {
@@ -79,21 +92,22 @@ std::vector<double> RadixSort(const std::vector<double>& vect, int rad) {
 }
 
 std::vector<double> Not_Parallel_Radix_Sort(const std::vector<double>& vect) {
+    int size = vect.size();
     int radixNegativeZero = 0;
     int maxRadixNegativeZero = RightOfThePoint(vect[0]);
-    for (int i = 1; i < static_cast<int>(vect.size()); ++i) {
+    for (int i = 1; i < size; ++i) {
         radixNegativeZero = RightOfThePoint(vect[i]);
         if (radixNegativeZero > maxRadixNegativeZero) {
             maxRadixNegativeZero = radixNegativeZero;
         }
     }
-    double max = vect[0];
-    for (int i = 1; i < static_cast<int>(vect.size()); i++) {
-        if (vect[i] > max) {
-            max = vect[i];
+    double max_elem = vect[0];
+    for (int i = 1; i < size; i++) {
+        if (vect[i] > max_elem) {
+            max_elem = vect[i];
         }
     }
-    int maxRadixPositiveZero = LeftOfThePoint(max);
+    int maxRadixPositiveZero = LeftOfThePoint(max_elem);
     std::vector<double> result(vect);
     for (int i = -maxRadixNegativeZero; i <= maxRadixPositiveZero; i++) {
         result = RadixSort(result, i);

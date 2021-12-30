@@ -16,6 +16,7 @@ TEST(Radix_Sort, Test1_Not_Parallel_Radix_Sort_Double) {
         std::sort(v.begin(), v.end());
         ASSERT_EQ(tmp, v);
     }
+    MPI_Barrier(MPI_COMM_WORLD);
 }
 
 TEST(Radix_Sort, Test2_Parallel_Radix_Sort_Double) {
@@ -36,6 +37,7 @@ TEST(Radix_Sort, Test2_Parallel_Radix_Sort_Double) {
     if (ProcRank == 0) {
         ASSERT_EQ(sort, tmp);
     }
+    MPI_Barrier(MPI_COMM_WORLD);
 }
 
 TEST(Radix_Sort, Test3_Not_Parallel_VS_Parallel_With_Small_Vector) {
@@ -56,6 +58,7 @@ TEST(Radix_Sort, Test3_Not_Parallel_VS_Parallel_With_Small_Vector) {
     if (ProcRank == 0) {
         ASSERT_EQ(sort, tmp);
     }
+    MPI_Barrier(MPI_COMM_WORLD);
 }
 
 TEST(Radix_Sort, Test4_Not_Parallel_VS_Parallel_With_Medium_Vector) {
@@ -87,7 +90,9 @@ TEST(Radix_Sort, Test4_Not_Parallel_VS_Parallel_With_Medium_Vector) {
         ASSERT_EQ(p_vec, not_p_vec);
         std::cout << "NotParallel " << t2 - t1 << std::endl;
         std::cout << "Parallel " << t4 - t3 << std::endl;
+        std::cout << "Effiency " << (t2 - t1) / (t4 - t3) << std::endl;
     }
+    MPI_Barrier(MPI_COMM_WORLD);
 }
 
 TEST(Radix_Sort, Test5_Not_Parallel_VS_Parallel_With_Big_Vector_Effiency) {
@@ -121,6 +126,7 @@ TEST(Radix_Sort, Test5_Not_Parallel_VS_Parallel_With_Big_Vector_Effiency) {
         std::cout << "Parallel " << t4 - t3 << std::endl;
         std::cout << "Effiency " << (t2 - t1) / (t4 - t3) << std::endl;
     }
+    MPI_Barrier(MPI_COMM_WORLD);
 }
 
 

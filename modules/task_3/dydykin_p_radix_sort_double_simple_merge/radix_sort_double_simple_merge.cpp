@@ -25,8 +25,7 @@ std::vector<double> Merge(const std::vector<double>& vec_l,
         if (vec_l[i] < vec_r[j]) {
             result[k] = vec_l[i];
             i++;
-        }
-        else {
+        } else {
             result[k] = vec_r[j];
             j++;
         }
